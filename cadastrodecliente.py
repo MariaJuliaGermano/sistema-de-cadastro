@@ -7,16 +7,13 @@ def ler_cadastro():
     try:
         with open('cadastro.json', 'r') as arquivo:
             dados = json.load(arquivo)
-            if not isinstance(dados, list):
-                raise ValueError
-            for item in dados:
-                if not isinstance(item, dict):
-                    raise ValueError
             return dados
+        
     except (FileNotFoundError, ValueError):
         return []
     except json.JSONDecodeError:
         return []
+    
 
 
 def escrever_cadastro(dados):
