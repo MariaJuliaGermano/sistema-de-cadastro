@@ -6,15 +6,9 @@ from time import sleep
 def ler_cadastro():
     try:
         with open('cadastro.json', 'r') as arquivo:
-            dados = json.load(arquivo)
-            return dados
-        
+            json.load(arquivo)
     except (FileNotFoundError, ValueError):
         return []
-    except json.JSONDecodeError:
-        return []
-    
-
 
 def escrever_cadastro(dados):
     with open('cadastro.json', 'w') as arquivo:
