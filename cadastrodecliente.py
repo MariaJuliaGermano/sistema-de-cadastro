@@ -1,7 +1,27 @@
 import os
+import json
 from time import sleep
 
-cadastro = []
+
+def ler_cadastro():
+    try:
+        with open('cadastro.json', 'r') as arquivo:
+            dados = json.load(arquivo)
+            if not isinstance(dados, list):
+                raise ValueError
+            for item in dados:
+                if not isinstance(item, dict):
+                    raise ValueError
+            return dados
+    except (FileNotFoundError, ValueError):
+        return []
+    except json.JSONDecodeError:
+        return []
+
+
+def escrever_cadastro(dados):
+    with open('cadastro.json', 'w') as arquivo:
+        json.dump(dados, arquivo, indent=4)
 
 
 def nome_sistema():
@@ -20,25 +40,33 @@ def menu():
 
 
 def cadastrar():
-    global cadastro
-    pessoa = dict()
+    dados = ler_cadastro()
     print("\n\033[93mCadastrando um cliente:\033[0m\n")
-    pessoa['NOME'] = str(input("Nome: "))
-    pessoa['EMAIL'] = str(input("E-mail: "))
-    pessoa['CPF'] = int(input("CPF: "))
-    pessoa['TELEFONE'] = int(input("TELEFONE: "))
+    nome = input("Nome: ")
+    email = input("E-mail: ")
+    cpf = input("CPF: ")
+    telefone = input("TELEFONE: ")
 
-    cadastro.append(pessoa.copy())
+    novo_cadastro = {
+        "NOME": nome,
+        "EMAIL": email,
+        "CPF": cpf,
+        "TELEFONE": telefone
+    }
+
+    dados.append(novo_cadastro)
+    escrever_cadastro(novo_cadastro)
 
     print("\n\033[92mCliente Cadastrado com sucesso!\033[0m\n")
     sleep(1)
 
 
 def exibir():
-    global cadastro
-    if cadastro:
+    os.system("cls")
+    dados = ler_cadastro()
+    if dados:
         print("\n\033[93mExibindo clientes cadastrados:\033[0m\n")
-        for pessoa in cadastro:
+        for pessoa in dados:
             print("\033[96m===== ",pessoa["NOME"]," =====\033[0m")
             print(f"NOME: {pessoa['NOME']}")
             print(f"EMAIL: {pessoa['EMAIL']}")
@@ -52,10 +80,10 @@ def exibir():
 
 
 def buscar():
-    global cadastro
+    dados = ler_cadastro()
     nome = input("\nDigite o nome do cliente que deseja buscar: ")
     encontrado = False
-    for pessoa in cadastro:
+    for pessoa in dados:
         if pessoa["NOME"].lower() == nome.lower():
             print("\n\033[93mCliente encontrado:\033[0m\n")
             print("===== ",pessoa["NOME"]," =====")
@@ -70,9 +98,9 @@ def buscar():
 
 
 def atualizar():
-    global cadastro
+    dados = ler_cadastro()
     nome = input("\nDigite o nome do cliente que deseja atualizar: ")
-    for pessoa in cadastro:
+    for pessoa in dados:
         if pessoa['NOME'].lower() == nome.lower():
             print("\n\033[93mAtualizando cliente:\033[0m\n")
             print("===== ",pessoa["NOME"]," =====")
@@ -87,11 +115,11 @@ def atualizar():
 
 
 def excluir():
-    global cadastro
+    dados = ler_cadastro()
     nome = input("\nDigite o nome do cliente que deseja excluir: ")
-    for pessoa in cadastro:
+    for pessoa in dados:
         if pessoa['NOME'].lower() == nome.lower():
-            cadastro.remove(pessoa)
+            dados.remove(pessoa)
             print("\n\033[92mCliente excluído com sucesso!\033[0m\n")
             return
         
