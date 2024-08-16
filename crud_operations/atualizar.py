@@ -1,5 +1,5 @@
 import os 
-from storage.data_handler import ler_cadastro, escrever_cadastro
+from database.data_handler import ler_cadastro, escrever_cadastro
 
 def atualizar():
     os.system('cls')
