@@ -20,7 +20,7 @@ Este é um sistema simples de cadastro de clientes, implementado em Python, que 
 │   ├── cadastrar.py
 │   ├── excluir.py
 │   └── exibir.py
-├── storage/
+├── database/
 │   └── data_handler.py
 ├── cadastro.json
 └── index.py
